@@ -4,11 +4,47 @@
     import { goto } from "$app/navigation"
     import { onMount } from "svelte"
 
+    let fileInput;
     onMount(() => {
-        if (!$page.data.session) {
-            goto("/")
-        }
+        if (!$page.data.session) goto("/");
+
+        fileInput = document.getElementById("fileInput");
     });
+
+    /*async function uploadFile() {
+        const formData = new FormData();
+        formData.append("file", fileInput.files[0]);
+
+        const response = await fetch("/api/pdf", {
+            method: "POST",
+            body: formData
+        }).then(res => res.json());
+
+        if (response.success) {
+            alert("File uploaded successfully!");
+        } else {
+            alert("File upload failed!");
+        }
+    }*/
+
+    /* TODO, Fetch from backend */
+    let textbooks = [
+        {
+            name: "Textbook Name",
+            course: "Course",
+            download: "Download"
+        },
+        {
+            name: "Textbook Name",
+            course: "Course",
+            download: "Download"
+        },
+        {
+            name: "Textbook Name",
+            course: "Course",
+            download: "Download"
+        }
+    ]
 
 </script>
 
@@ -21,27 +57,20 @@
             </span><br>
             <button on:click={() => signOut()} class="button">Sign Out</button>
         </div>
-        <button class="upload">
-            Upload a Syllabus 📝
-        </button>
-        <h2>Get your Books 📚</h2>
+        <form id="uploadForm" action="?/upload" enctype="multipart/form-data" method="POST">
+            <input type="file" id="file" name="file" accept=".pdf"/>
+            <button class="upload" type="submit">
+                Upload a Syllabus 📝
+            </button>
+        </form>
         <ul class="textbooks">
-            <!-- TODO: Foreach Response from Backend -->
+            {#each textbooks as textbook}
             <li>
-                <span>Textbook Name</span>
-                <span>Course</span>
-                <button>View</button>
+                <span>{textbook.name}</span>
+                <span>{textbook.course}</span>
+                <button>Download</button>
             </li>
-            <li>
-                <span>Textbook Name</span>
-                <span>Course</span>
-                <button>View</button>
-            </li>
-            <li>
-                <span>Textbook Name</span>
-                <span>Course</span>
-                <button>View</button>
-            </li>
+            {/each}
         </ul>
     </div>
 {:else}
@@ -53,10 +82,15 @@
 
 <style>
     .container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100%;
+
         display: flex;
         flex-direction: column;
         align-items: center;
-        height: 100vh;
         text-align: left;
         background-color: var(--color-light);
     }
@@ -82,21 +116,15 @@
         scale: 1;
         box-shadow: 0 0 20px 0 var(--color-accent); 
     }
-    h2 {
-        font-family: 'Nunito Sans', sans-serif;
-        font-size: 3rem;
-        font-weight: bold;
-        margin-top: 2rem;
-        color: var(--color-secondary);
-    }
 
     .user {
         position: absolute;
         top: 3vh;
-        left: 3vw;
+        right: 3vw;
         font-size: 1.2rem;
     }
     .user button {
+        float: right;
         font-size: 1rem;
         background-color: var(--color-accent);
         color: var(--color-light);
@@ -109,6 +137,49 @@
     }
     .user button:hover {
         scale: 1.1;
+    }
+
+    ul {
+        list-style: none;
+        background-color: var(--color-light);
+        padding: 0;
+        margin-top: 2rem;
+        width: 80vw;
+        border-radius: 10px;
+        font-size: 1.2rem;
+    }
+    li {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        background-color: var(--color-light);
+        color: var(--color-secondary);
+        border: 2px solid var(--color-secondary);
+        transition: 0.3s all;
+    }
+    li button {
+        font-size: 1rem;
+        background-color: var(--color-accent);
+        color: var(--color-light);
+        z-index: 0;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+        transition: 0.3s all;
+        border: 2px solid transparent;
+    }
+    li button:hover {
+        scale: 1.1;
+        background-color: var(--color-light);
+        color: var(--color-accent);
+        border: 2px solid var(--color-accent);
+    }
+    li button:active {
+        scale: 1;
+        box-shadow: 0 0 20px 0 var(--color-accent);
     }
 
     .signedout {
