@@ -5,27 +5,11 @@
     import { onMount } from "svelte"
 
     let fileInput;
+    let uploadForm;
+
     onMount(() => {
         if (!$page.data.session) goto("/");
-
-        fileInput = document.getElementById("fileInput");
     });
-
-    /*async function uploadFile() {
-        const formData = new FormData();
-        formData.append("file", fileInput.files[0]);
-
-        const response = await fetch("/api/pdf", {
-            method: "POST",
-            body: formData
-        }).then(res => res.json());
-
-        if (response.success) {
-            alert("File uploaded successfully!");
-        } else {
-            alert("File upload failed!");
-        }
-    }*/
 
     /* TODO, Fetch from backend */
     let textbooks = [
@@ -57,9 +41,10 @@
             </span><br>
             <button on:click={() => signOut()} class="button">Sign Out</button>
         </div>
-        <form id="uploadForm" action="?/upload" enctype="multipart/form-data" method="POST">
-            <input type="file" id="file" name="file" accept=".pdf"/>
-            <button class="upload" type="submit">
+        <form bind:this={uploadForm} action="?/upload" enctype="multipart/form-data" method="POST">
+            <input bind:this={fileInput} type="file" name="file" accept=".pdf" hidden
+                on:change={() => uploadForm.submit()}/>
+            <button class="upload" on:click={fileInput.click()} type="button">
                 Upload a Syllabus 📝
             </button>
         </form>
@@ -94,26 +79,31 @@
         text-align: left;
         background-color: var(--color-light);
     }
-    button.upload {
+    form {
         margin-top: 10vh;
+    }
+    .upload {
+        font-family: 'Nunito Sans', sans-serif;
         font-size: 3rem;
         font-weight: bold;
-        background: none;
-        color: var(--color-accent);
-        z-index: 0;
-        border: none;
+        text-decoration: none;
+        background-color: var(--color-accent);
+        color: var(--color-light);
+
+        border: 4px solid transparent;
         border-radius: 10px;
         padding: 10px 20px;
+
         cursor: pointer;
         transition: 0.3s all;
     }
-    button.upload:hover {
-        background-color: var(--color-accent);
-        color: var(--color-light);
-        scale: 1.1;
+    .upload:hover {
+        background-color: var(--color-light);
+        color: var(--color-accent);
+        border: 4px solid var(--color-accent);
     }
-    button.upload:active {
-        scale: 1;
+    .upload:active {
+        scale: 0.95;
         box-shadow: 0 0 20px 0 var(--color-accent); 
     }
 
@@ -158,6 +148,9 @@
         color: var(--color-secondary);
         border: 2px solid var(--color-secondary);
         transition: 0.3s all;
+    }
+    li:hover > button {
+        scale: 1.1;
     }
     li button {
         font-size: 1rem;
