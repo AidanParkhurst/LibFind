@@ -12,9 +12,8 @@
 </script>
 
 <div class="container">
-    
-    <h1>All Your Class Readings</h1>
-    <h2>Fast, Automatic, and Free</h2>
+    <h1>Upload a Syllabus, Get the Textbooks</h1>
+    <h2>Fast, AI powered, and Free</h2>
     <button on:click={() => {signIn("google")}}>
         Sign In with Google
     </button>
