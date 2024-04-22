@@ -14,17 +14,17 @@
     /* TODO, Fetch from backend */
     let textbooks = [
         {
-            name: "Textbook Name",
+            name: "Textbook",
             course: "Course",
             download: "Download"
         },
         {
-            name: "Textbook Name",
+            name: "Textbook",
             course: "Course",
             download: "Download"
         },
         {
-            name: "Textbook Name",
+            name: "Textbook",
             course: "Course",
             download: "Download"
         }
@@ -51,9 +51,19 @@
         <ul class="textbooks">
             {#each textbooks as textbook}
             <li>
-                <span>{textbook.name}</span>
-                <span>{textbook.course}</span>
-                <button>Download</button>
+                <div class="stat">
+                    <h4>Name</h4>
+                    <h3>{textbook.name}</h3>
+                </div>
+
+                <div class="stat">
+                    <h4>Course</h4>
+                    <h3>{textbook.course}</h3>
+                </div>
+
+                <button>
+                    Download 📚
+                </button>
             </li>
             {/each}
         </ul>
@@ -98,6 +108,7 @@
         transition: 0.3s all;
     }
     .upload:hover {
+        scale: 1.1;
         background-color: var(--color-light);
         color: var(--color-accent);
         border: 4px solid var(--color-accent);
@@ -120,13 +131,22 @@
         color: var(--color-light);
         z-index: 0;
         border: none;
-        border-radius: 5px;
+        border-radius: 7px;
         padding: 5px 10px;
+
         cursor: pointer;
         transition: 0.3s all;
+        border: 2px solid transparent;
     }
     .user button:hover {
         scale: 1.1;
+        background-color: var(--color-light);
+        color: var(--color-accent);
+        border: 2px solid var(--color-accent);
+    }
+    .user button:active {
+        scale: 1;
+        box-shadow: 0 0 20px 0 var(--color-accent);
     }
 
     ul {
@@ -136,39 +156,66 @@
         margin-top: 2rem;
         width: 80vw;
         border-radius: 10px;
-        font-size: 1.2rem;
+        font-size: 2rem;
     }
     li {
         display: flex;
         justify-content: space-between;
+        color: var(--color-secondary);
+
         margin-bottom: 1rem;
         padding: 1rem 2rem;
+
         border-radius: 10px;
         background-color: var(--color-light);
-        color: var(--color-secondary);
         border: 2px solid var(--color-secondary);
+
         transition: 0.3s all;
     }
     li:hover > button {
         scale: 1.1;
     }
-    li button {
+
+    .stat {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .stat h4 {
+        margin-top: 1rem;
+        margin-bottom: .5rem;
+
         font-size: 1rem;
+        color: var(--color-accent);
+    }
+    .stat h3 {
+        margin: 0;
+        margin-bottom: 1rem;
+
+        font-size: 1.5rem;
+        color: var(--color-secondary);
+    }
+
+    li button {
+        font-size: 1.5rem;
+        padding: 5px 10px;
+        margin: 1rem 0;
         background-color: var(--color-accent);
         color: var(--color-light);
-        z-index: 0;
+
         border: none;
-        border-radius: 5px;
-        padding: 5px 10px;
+        border-radius: 10px;
+
         cursor: pointer;
         transition: 0.3s all;
-        border: 2px solid transparent;
+        border: 3px solid transparent;
     }
     li button:hover {
         scale: 1.1;
         background-color: var(--color-light);
         color: var(--color-accent);
-        border: 2px solid var(--color-accent);
+        border: 3px solid var(--color-accent);
     }
     li button:active {
         scale: 1;

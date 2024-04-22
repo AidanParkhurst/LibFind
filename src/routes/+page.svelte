@@ -15,7 +15,7 @@
     <h1>Upload a Syllabus, Get the Textbooks</h1>
     <h2>Fast, AI powered, and Free</h2>
     <button on:click={() => {signIn("google")}}>
-        First, Sign In with Google
+        Sign In with Google
     </button>
 </div>
 
@@ -60,6 +60,7 @@
     }
 
     button:hover {
+        scale: 1.1;
         background: var(--color-light);
         color: var(--color-accent);
         border: 3px solid var(--color-accent);
@@ -67,7 +68,7 @@
 
     button:active {
         border: 3px solid var(--color-accent);
-        transform: scale(0.95);
+        scale: 1;
         box-shadow: 0 5px 20px var(--color-accent);
    } 
 </style>
