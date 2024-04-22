@@ -25,10 +25,11 @@ export async function post(req, res) {
                 else {
                     // TODO: Process the PDF data here//
                     
-                    // And finally, respond to the frontend
                     res.end(JSON.stringify({ ok: true, message: 'PDF processed successfully' }));
                 }
             });
-    }
-  });
+        }
+    });
+    
+    // TODO: Finally, respond to the frontend
 }
