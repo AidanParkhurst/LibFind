@@ -27,7 +27,7 @@
         align-items: center;
         height: 100vh;
         text-align: center;
-        background-color: var(--color-dark);
+        background-color: var(--color-light);
     }
 
     h1 {
@@ -46,8 +46,9 @@
         font-size: 1.5rem;
         margin-top: 1rem;
         
-        background-color: var(--color-primary);
-        color: var(--color-dark);
+        background-color: var(--color-accent);
+        color: var(--color-light);
+        z-index: 0;
 
         border: none;
         border-radius: 10px;
@@ -55,13 +56,18 @@
 
         cursor: pointer;
         transition: 0.3s all;
+        border: 3px solid transparent;
     }
 
     button:hover {
-        background-color: var(--color-secondary);
+        background: var(--color-light);
+        color: var(--color-accent);
+        border: 3px solid var(--color-accent);
     }
 
     button:active {
-        background-color: var(--color-secondary);
+        border: 3px solid var(--color-accent);
+        transform: scale(0.95);
+        box-shadow: 0 5px 20px var(--color-accent);
    } 
 </style>
