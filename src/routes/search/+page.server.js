@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import fetch from 'node-fetch';
-import pdfParse from 'pdf-parse';
+import { parse } from '@bakedpotatolord/pdf-parse';
 import libgen from 'libgen';
 /* TODO Add imports (Chatgpt, PDF-parse, Libgen) to process the PDF file */
 
@@ -22,8 +22,8 @@ export const actions = {
 
             /* At this point, the file is saved to the server */
             /* TODO: Add code to process the file */
-            const pdfData = fs.readFileSync(filename);
-            let data = await pdfParse(pdfData);
+            let dataBuffer = fs.readFileSync(filename);
+            const data = await parse(dataBuffer);
             const text = data.text;
 
             const CHATGPT_API_KEY = OPENAI;
