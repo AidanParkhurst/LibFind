@@ -1,9 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import fetch from 'node-fetch';
-import { parse } from '@bakedpotatolord/pdf-parse';
+import pkg from '@bakedpotatolord/pdf-parse';
 import libgen from 'libgen';
+
 /* TODO Add imports (Chatgpt, PDF-parse, Libgen) to process the PDF file */
+const { parse } = pkg;
 
 /* Svelte Form Actions, because users upload PDFs through a form */
 export const actions = {
@@ -30,21 +32,20 @@ export const actions = {
             const prompt = `Write down the titles of all the textbooks required for this course in separate lines. Do not include any other information. ${text}`;
 
             const body = {
-                model: "gpt-3.5-turbo-0125",
-                prompt: prompt,
-                max_tokens: 1024
-              };
-
-            const GPT_info = await fetch('https://api.openai.com/v1/engines/text-davinci-003/completions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${CHATGPT_API_KEY}`
-            },
-            body: JSON.stringify(body)
+                model: "gpt-3.5-turbo",
+                max_tokens: 16000
+            };
+            
+            const GPT_info = await fetch('https://api.openai.com/v1/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${CHATGPT_API_KEY}`
+                },
+                body: JSON.stringify(body)
             });
-
-            const chatGptResult = await chatGptResponse.json();
+            
+            const chatGptResult = await GPT_info.json();
             const textbooks = chatGptResult.choices[0].text.split('\n');
 
             const results = [];
