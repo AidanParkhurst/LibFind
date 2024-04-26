@@ -27,7 +27,7 @@ export const actions = {
             const text = data.text;
 
             const CHATGPT_API_KEY = OPENAI;
-            const prompt = `Write down the names of all the textbooks required for this course on separate lines. Do not include any other information. ${text}`;
+            const prompt = `Write down the titles of all the textbooks required for this course in separate lines. Do not include any other information. ${text}`;
 
             const body = {
                 model: "gpt-3.5-turbo-0125",
