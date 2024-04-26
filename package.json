@@ -18,10 +18,11 @@
 	"dependencies": {
 		"@auth/core": "^0.30.0",
 		"@auth/sveltekit": "^1.0.0",
+		"@bakedpotatolord/pdf-parse": "^1.0.0",
 		"libgen": "^2.2.0",
 		"mongodb": "^6.5.0",
+		"mongoose": "^8.3.2",
 		"node-fetch": "^3.3.2",
-		"path": "^0.12.7",
-		"pdf-parse": "^1.1.1"
+		"path": "^0.12.7"
 	}
 }
