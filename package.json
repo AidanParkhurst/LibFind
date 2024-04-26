@@ -17,6 +17,7 @@
 	"type": "module",
 	"dependencies": {
 		"@auth/core": "^0.30.0",
+		"@auth/mongodb-adapter": "^3.0.0",
 		"@auth/sveltekit": "^1.0.0",
 		"@bakedpotatolord/pdf-parse": "^1.0.0",
 		"libgen": "^2.2.0",

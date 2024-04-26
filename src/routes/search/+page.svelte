@@ -3,6 +3,7 @@
     import { page } from "$app/stores"
     import { goto } from "$app/navigation"
     import { onMount } from "svelte"
+    import { fade } from "svelte/transition"
 
     let fileInput;
     let uploadForm;
@@ -11,65 +12,50 @@
         if (!$page.data.session) goto("/");
     });
 
-    /* TODO, Fetch from backend */
-    let textbooks = [
-        {
-            name: "Textbook",
-            course: "Course",
-            download: "Download"
-        },
-        {
-            name: "Textbook",
-            course: "Course",
-            download: "Download"
-        },
-        {
-            name: "Textbook",
-            course: "Course",
-            download: "Download"
-        }
-    ]
+    export let data;
+    $: textbooks = data.textbooks ?? []
 
+    export let form;
 </script>
 
 {#if $page.data.session}
     <div class="container">
         <div class="user">
-            <span>
-                <small>Signed in as</small>
-                <strong>{$page.data.session.user?.name ?? "User"}</strong>
-            </span><br>
+            <h4>
+                Signed in as <b>{$page.data.session.user.name}</b>
+            </h4>
             <button on:click={() => signOut()} class="button">Sign Out</button>
         </div>
-        <form bind:this={uploadForm} action="?/upload" enctype="multipart/form-data" method="POST">
-            <input bind:this={fileInput} type="file" name="file" accept=".pdf" hidden
-                on:change={() => uploadForm.submit()}/>
-            <button class="upload" on:click={fileInput.click()} type="button">
-                Upload a Syllabus 📝
-            </button>
-        </form>
-        <ul class="textbooks">
-            {#each textbooks as textbook}
-            <li>
-                <div class="stat">
-                    <h4>Name</h4>
-                    <h3>{textbook.name}</h3>
-                </div>
-
-                <div class="stat">
-                    <h4>Course</h4>
-                    <h3>{textbook.course}</h3>
-                </div>
-
-                <button>
-                    Download 📚
+        <div class="textbooks">
+            <form bind:this={uploadForm} enctype="multipart/form-data" method="POST">
+                <input bind:this={fileInput} type="file" name="file" accept=".pdf" hidden
+                    on:change={() => uploadForm.submit()}/>
+                <button class="textbook upload" on:click={fileInput.click()} type="button">
+                    Upload a Syllabus 📝
                 </button>
-            </li>
+            </form>
+            {#each textbooks as textbook}
+            <a class="textbook" href="{textbook.downloadLink}">
+                <h1>{textbook.title}</h1>
+                <div class="stat">
+                    <h3>Author(s)<h3>
+                    <h2>{textbook.author}</h2>
+                </div>
+            </a>
             {/each}
-        </ul>
+        </div>
+        {#if form?.success}
+        <div transition:fade class="notif success">
+            <span>Textbook Found! 🪄</span>
+        </div>
+        {:else if form?.error}
+        <div class="notif fail">
+            <span>Unable to find Textbook... 🔮</span>
+        </div>
+        {/if}
     </div>
 {:else}
-    <div class="signedout">
+    <div transition:fade class="signedout">
         <span>Woops, you're not signed in!</span>
         <button on:click={() => goto("/")} class="button">Sign in</button>
     </div>
@@ -86,155 +72,180 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        text-align: left;
+        justify-content: center;
+
         background-color: var(--color-light);
     }
     form {
-        margin-top: 10vh;
+        width: 100%;
+        margin-bottom: 1rem;
     }
-    .upload {
-        font-family: 'Nunito Sans', sans-serif;
-        font-size: 3rem;
-        font-weight: bold;
-        text-decoration: none;
-        background-color: var(--color-accent);
-        color: var(--color-light);
+    .textbooks {
+        width: 100%;
+        height: 100%;
 
-        border: 4px solid transparent;
-        border-radius: 10px;
-        padding: 10px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        background-color: var(--color-light);
+        color: var(--color-dark);
+    }
+    .textbook {
+        width: 80%;
+        height: 20%;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        margin: 1rem 0 0 0;
+        padding: 0.5rem 2rem 0.5rem 1rem;
+
+        background-color: var(--color-light);
+        color: var(--color-dark);
+
+        border-radius: 15px;
+        border: 2px solid var(--color-border);
+        box-shadow: 5px 5px 20px var(--color-border);
 
         cursor: pointer;
         transition: 0.3s all;
     }
-    .upload:hover {
-        scale: 1.1;
-        background-color: var(--color-light);
-        color: var(--color-accent);
-        border: 4px solid var(--color-accent);
+    .textbook:hover {
+        background-color: var(--color-border);
     }
-    .upload:active {
+    .textbook:active {
         scale: 0.95;
-        box-shadow: 0 0 20px 0 var(--color-accent); 
+        background-color: var(--color-dark);
+        color: var(--color-light);
+    }
+
+    a.textbook {
+        text-decoration: none;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0;
+    }
+    a.textbook h1 {
+        width: 50%; 
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+    a.textbook h3 {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+    a.textbook h2 {
+        font-size: 1.2rem;
+        font-weight: 400;
+    }
+
+    .stat {
+        width: 20%;
+        display: flex;
+        flex-direction: column;
+    }
+    .stat h3 {
+        color: var(--color-mid);
+    }
+    .stat h2 {
+        color: var(--color-dark);
+    }
+
+    form {
+        width: 80%;
+        height: 20%;
+    }
+
+    button.textbook {
+        width: 100%;
+        height: 100%;
+        border: none;
+
+        justify-content: center;
+        background-color: var(--color-border);
+        color: var(--color-mid); 
+    }
+    button.textbook:hover {
+        background-color: var(--color-success);
+        color: var(--color-light);
+    }
+
+    .upload {
+        font-family: "Inter", sans-serif;
+        font-size: 2rem;
+        font-weight: 600;
     }
 
     .user {
         position: absolute;
-        top: 3vh;
-        right: 3vw;
+        top: 0;
+        right: 0;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: right;
+        
+        padding: 1rem 10%;
+        background-image: linear-gradient(180deg, var(--color-light), transparent);
+
         font-size: 1.2rem;
+        color: var(--color-mid);
+
+        height: 5%;
+    }
+    .user h4 {
+        margin: 0 1em 0 0;
     }
     .user button {
-        float: right;
-        font-size: 1rem;
-        background-color: var(--color-accent);
-        color: var(--color-light);
-        z-index: 0;
+        font-weight: 400;
         border: none;
-        border-radius: 7px;
-        padding: 5px 10px;
-
+        background-color: var(--color-light);
+        border: 2px solid var(--color-border);
+        color: var(--color-mid);
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
         cursor: pointer;
         transition: 0.3s all;
-        border: 2px solid transparent;
     }
     .user button:hover {
-        scale: 1.1;
-        background-color: var(--color-light);
-        color: var(--color-accent);
-        border: 2px solid var(--color-accent);
+        background-color: var(--color-danger);
+        color: var(--color-light);
     }
     .user button:active {
-        scale: 1;
-        box-shadow: 0 0 20px 0 var(--color-accent);
+        scale: 0.95;
     }
 
-    ul {
-        list-style: none;
-        background-color: var(--color-light);
-        padding: 0;
-        margin-top: 2rem;
-        width: 80vw;
-        border-radius: 10px;
-        font-size: 2rem;
-    }
-    li {
-        display: flex;
-        justify-content: space-between;
-        color: var(--color-secondary);
-
-        margin-bottom: 1rem;
+    .notif {
+        position: absolute;
+        bottom: 3vh;
+        right: 3vw;
+        font-size: 1.2rem;
         padding: 1rem 2rem;
-
-        border-radius: 10px;
-        background-color: var(--color-light);
-        border: 2px solid var(--color-secondary);
-
-        transition: 0.3s all;
-    }
-    li:hover > button {
-        scale: 1.1;
-    }
-
-    .stat {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-    .stat h4 {
-        margin-top: 1rem;
-        margin-bottom: .5rem;
-
-        font-size: 1rem;
-        color: var(--color-accent);
-    }
-    .stat h3 {
-        margin: 0;
-        margin-bottom: 1rem;
-
-        font-size: 1.5rem;
-        color: var(--color-secondary);
-    }
-
-    li button {
-        font-size: 1.5rem;
-        padding: 5px 10px;
-        margin: 1rem 0;
-        background-color: var(--color-accent);
+        border-radius: 15px;
         color: var(--color-light);
-
-        border: none;
-        border-radius: 10px;
-
-        cursor: pointer;
-        transition: 0.3s all;
-        border: 3px solid transparent;
+        animation: fade 0.3s 2s forwards;
     }
-    li button:hover {
-        scale: 1.1;
-        background-color: var(--color-light);
-        color: var(--color-accent);
-        border: 3px solid var(--color-accent);
+    .notif.success {
+        background-color: var(--color-success);
     }
-    li button:active {
-        scale: 1;
-        box-shadow: 0 0 20px 0 var(--color-accent);
+    .notif.fail {
+        background-color: var(--color-danger);
     }
 
-    .signedout {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        text-align: center;
-        background-color: var(--color-light);
-    }
-    .signedout span {
-        font-size: 2rem;
-        margin-top: 0;
-        color: var(--color-secondary);
+    @keyframes fade {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+        }
     }
 
 </style>

@@ -15,7 +15,7 @@
     <h1>Upload a Syllabus, Get the Textbooks</h1>
     <h2>Fast, AI powered, and Free</h2>
     <button on:click={() => {signIn("google")}}>
-        Sign In with Google
+        Sign In with <b>Google</b>
     </button>
 </div>
 
@@ -31,23 +31,23 @@
     }
 
     h1 {
-        font-size: 4rem;
-        margin-bottom: 0;
-        color: var(--color-accent);
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: var(--color-dark);
     }
 
     h2 {
         font-size: 2rem;
         margin-top: 0;
-        color: var(--color-secondary);
+        margin-bottom: 2rem;
+        color: var(--color-mid);
     }
 
     button {
         font-size: 1.5rem;
-        margin-top: 1rem;
         
-        background-color: var(--color-accent);
-        color: var(--color-light);
+        background-color: var(--color-border);
+        color: var(--color-mid);
         z-index: 0;
 
         border: none;
@@ -56,19 +56,15 @@
 
         cursor: pointer;
         transition: 0.3s all;
-        border: 3px solid transparent;
     }
 
     button:hover {
-        scale: 1.1;
-        background: var(--color-light);
-        color: var(--color-accent);
-        border: 3px solid var(--color-accent);
+        background-color: var(--color-dark);
+        color: var(--color-light);
     }
 
     button:active {
-        border: 3px solid var(--color-accent);
-        scale: 1;
-        box-shadow: 0 5px 20px var(--color-accent);
+        scale: .95;
+        box-shadow: 0 5px 20px var(--color-border);
    } 
 </style>
