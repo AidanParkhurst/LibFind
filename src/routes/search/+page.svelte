@@ -152,9 +152,17 @@
     }
     .stat h3 {
         color: var(--color-mid);
+        transition: 0.3s all;
     }
     .stat h2 {
         color: var(--color-dark);
+        transition: 0.3s all;
+    }
+    a.textbook:active .stat h2 {
+        color: var(--color-light);
+    }
+    a.textbook:active .stat h3 {
+        color: var(--color-light);
     }
 
     form {

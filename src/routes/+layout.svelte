@@ -1,10 +1,11 @@
+<title>LibFind</title>
 <slot></slot>
 
 <style>
     :root {
         font-family: 'Inter', sans-serif;
         --color-light: #f5f5f5;
-        --color-mid: #999;
+        --color-mid: #888;
         --color-dark: #333;
         --color-border: #ddd;
         --color-success: #28a745;
